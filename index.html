@@ -3,93 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CRITICAL_SYSTEM_ERROR</title>
+    <title>TERMINAL_ERROR_V8</title>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: black; overflow: hidden; touch-action: none; font-family: 'Courier New', Courier, monospace; }
-        .layer { position: fixed; width: 100%; height: 100%; top: 0; left: 0; display: none; }
-        #m { display: block; background: black; }
-        #s { background: url('https://media.giphy.com/media/oEI9uWUicKgS2UzSsw/giphy.gif'); background-size: cover; opacity: 0.8; }
-        #r { background: black; display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 2; }
-        .t { font-size: 30px; font-weight: bold; animation: rb 0.1s infinite, sk 0.05s infinite; text-align: center; }
-        @keyframes rb { 0%{color:red;} 33%{color:#0f0;} 66%{color:#00f;} 100%{color:red;} }
-        @keyframes sk { 0%{transform:translate(5px,5px);} 50%{transform:translate(-5px,-5px);} 100%{transform:translate(5px,5px);} }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: black; overflow: hidden; font-family: monospace; }
         
-        /* شقوق مبرمجة أقوى */
+        /* طبقة حماية تمنع اللمس نهائياً بعد التفعيل */
+        #touch-blocker {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 100000; display: none; touch-action: none;
+        }
+
+        .layer { position: fixed; width: 100%; height: 100%; top: 0; left: 0; display: none; z-index: 1; }
+        
+        #m { display: block; background: black; } /* الماتريكس */
+        #s { background: url('https://media.giphy.com/media/oEI9uWUicKgS2UzSsw/giphy.gif'); background-size: cover; } /* التشويش */
+        
+        /* نصوص قوس قزح السريعة جداً */
+        #r { background: black; display: flex; justify-content: center; align-items: center; z-index: 2; }
+        .t { font-size: 40px; font-weight: bold; animation: rb 0.05s infinite, sk 0.03s infinite; text-align: center; }
+
+        @keyframes rb { 0%{color:#ff0000;} 20%{color:#00ff00;} 40%{color:#0000ff;} 60%{color:#ffff00;} 80%{color:#ff00ff;} 100%{color:#ff0000;} }
+        @keyframes sk { 0%{transform:translate(8px, -8px);} 50%{transform:translate(-8px, 8px);} 100%{transform:translate(8px, -8px);} }
+        
+        /* شقوق زجاجية مبرمجة SVG (مضمونة الظهور) */
         #c { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; display: none; 
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cpath d='M0,0 L200,300 L50,600 M300,0 L150,400 L400,800 M500,100 L200,450 L600,200' stroke='white' stroke-width='3' fill='none' opacity='0.7'/%3E%3C/svg%3E");
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: 99999; pointer-events: none; display: none; 
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cpath d='M0,0 L500,500 M500,0 L0,500 M250,0 L250,500 M0,250 L500,250 M100,0 L400,500 M0,100 L500,400' stroke='white' stroke-width='3' stroke-opacity='0.7'/%3E%3C/svg%3E");
             background-size: cover;
         }
     </style>
 </head>
-<body onclick="start()">
+<body onclick="launch()">
+
+    <div id="touch-blocker"></div>
     <div id="c"></div>
     <div id="m" class="layer"><canvas id="q"></canvas></div>
     <div id="s" class="layer"></div>
-    <div id="r" class="layer"><div class="t">HARDWARE_FAILURE</div><div class="t" style="font-size:15px">VOLTAGE_OVERLOAD_DETECTED</div></div>
+    <div id="r" class="layer"><div class="t">SYSTEM DESTROYED<br>0x000666</div></div>
     
-    <div id="btn" style="color:white; text-align:center; padding-top:40vh; z-index:10001; position:relative;">
-        <h1 style="color:red; font-size:40px;">⚠️</h1>
-        <p>جاري فحص أمان المعالج...</p>
-        <p style="color:#555;">انقر للاستمرار</p>
+    <div id="intro" style="color:white; text-align:center; padding-top:45vh; z-index:5; position:relative;">
+        <h2 style="color:red;">CRITICAL UPDATE REQUIRED</h2>
+        <p>انقر لإصلاح أعطال الذاكرة فوراً</p>
     </div>
 
     <script>
-        var q = document.getElementById('q'), ctx = q.getContext('2d'), s = window.screen, w = q.width = s.width, h = q.height = s.height, p = Array(256).fill(0);
-        function draw() {
-            ctx.fillStyle = 'rgba(0,0,0,.05)'; ctx.fillRect(0,0,w,h); ctx.fillStyle = '#0F0';
-            p.map((y, i) => { ctx.fillText(String.fromCharCode(1e2+Math.random()*33), i*10, y); p[i] = y > 758 + Math.random()*1e4 ? 0 : y+10; });
-        }
+        var q = document.getElementById('q'), s = window.screen, w = q.width = s.width, h = q.height = s.height, p = Array(256).join(1).split('');
+        var draw = function () {
+            var ctx = q.getContext('2d');
+            ctx.fillStyle = 'rgba(0,0,0,.08)'; ctx.fillRect(0,0,w,h); ctx.fillStyle = '#0F0';
+            ctx.font = '15pt monospace';
+            p.map(function(y, i){ ctx.fillText(String.fromCharCode(1e2+Math.random()*33), i*10, y); p[i] = (y > 758 + Math.random()*1e4) ? 0 : y+10; });
+        };
 
-        function start() {
-            // محاولة قفل المتصفح في وضع ملء الشاشة
-            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
-            
-            document.getElementById('btn').style.display = 'none';
+        function launch() {
+            // 1. تعطيل اللمس نهائياً
+            document.getElementById('touch-blocker').style.display = 'block';
+            document.getElementById('intro').style.display = 'none';
             document.getElementById('c').style.display = 'block';
-            document.body.style.pointerEvents = "none";
-            setInterval(draw, 33);
             
+            // 2. تشغيل الأنيميشن
+            setInterval(draw, 30);
             let layers = [document.getElementById('m'), document.getElementById('s'), document.getElementById('r')];
-            let curr = 0;
+            let i = 0;
             setInterval(() => {
                 layers.forEach(l => l.style.display = 'none');
-                layers[curr].style.display = 'block';
-                curr = (curr + 1) % layers.length;
-            }, 600);
+                layers[i].style.display = 'block';
+                i = (i + 1) % layers.length;
+                if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            }, 800);
 
-            // 🔊 خلطة الصوت المرعب (Distortion + Noise)
+            // 3. 🔊 الصوت "المرعب" (ترددات EAS Alert)
             const ac = new (window.AudioContext || window.webkitAudioContext)();
             
-            // توليد ضوضاء بيضاء (صوت وشوشة التلفاز القوي)
-            const bufferSize = 2 * ac.sampleRate, buffer = ac.createBuffer(1, bufferSize, ac.sampleRate), output = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) { output[i] = Math.random() * 2 - 1; }
-            
-            const noise = ac.createBufferSource();
-            noise.buffer = buffer;
-            noise.loop = true;
-
-            const filter = ac.createBiquadFilter();
-            filter.type = "lowpass";
-            filter.frequency.value = 1000;
-
-            const gain = ac.createGain();
-            noise.connect(filter); filter.connect(gain); gain.connect(ac.destination);
-            
-            noise.start();
-            gain.gain.value = 0.8;
-
-            // صوت طنين حاد يقطع الضوضاء
-            setInterval(() => {
+            function playTone(freq, type) {
                 const osc = ac.createOscillator();
-                osc.type = 'sawtooth';
-                osc.frequency.value = 200 + Math.random() * 800;
-                const g = ac.createGain();
-                osc.connect(g); g.connect(ac.destination);
-                g.gain.value = 0.3;
+                const gn = ac.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                osc.connect(gn);
+                gn.connect(ac.destination);
                 osc.start();
-                setTimeout(() => osc.stop(), 100);
-            }, 200);
+                // تقطيع الصوت لجعله كأنه إنذار حقيقي
+                setInterval(() => {
+                    gn.gain.value = gn.gain.value === 0 ? 0.4 : 0;
+                }, 400);
+            }
+
+            playTone(853, 'sine'); // التردد الأول للإنذار
+            playTone(960, 'sine'); // التردد الثاني (تداخلهم يسبب رعب)
+            
+            // إضافة صوت "خراب" (White Noise)
+            const bufferSize = 2 * ac.sampleRate, noiseBuffer = ac.createBuffer(1, bufferSize, ac.sampleRate), output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) { output[i] = Math.random() * 2 - 1; }
+            const noise = ac.createBufferSource(); noise.buffer = noiseBuffer; noise.loop = true;
+            const noiseGain = ac.createGain(); noiseGain.gain.value = 0.05;
+            noise.connect(noiseGain); noiseGain.connect(ac.destination);
+            noise.start();
         }
     </script>
 </body>
