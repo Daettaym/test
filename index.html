@@ -2,171 +2,116 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🚨 CRITICAL_SYSTEM_FAILURE_0x777</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>🚨 SYSTEM_FAILURE</title>
     <style>
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background: black; overflow: hidden; font-family: 'Courier New', monospace;
-            color: #0f0; /* تثبيت اللون الأخضر */
-            touch-action: none; user-select: none; -webkit-user-select: none;
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background: black; overflow: hidden; touch-action: none; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .layer { position: fixed; width: 100%; height: 100%; top: 0; left: 0; display: none; }
+        
+        #m { display: block; background: black; }
+        canvas { display: block; }
+        
+        #s { background: url('https://media.giphy.com/media/oEI9uWUicKgS2UzSsw/giphy.gif'); background-size: cover; opacity: 0.8; }
+        
+        #r { 
+            background: black; display: flex; justify-content: center; 
+            align-items: center; flex-direction: column; z-index: 2; 
+        }
+        .t { 
+            font-size: 32px; font-weight: 900; text-align: center;
+            animation: rb 0.1s infinite, sk 0.05s infinite; 
         }
 
-        /* حاويات الشاشة المقسمة */
-        .layer {
-            position: fixed; width: 100%; height: 100%; top: 0; left: 0;
-            display: none; z-index: 1; border: 2px solid #0f0;
+        @keyframes rb { 0%{color:red;} 33%{color:#0f0;} 66%{color:#00f;} 100%{color:red;} }
+        @keyframes sk { 0%{transform:translate(4px,4px);} 50%{transform:translate(-4px,-4px);} 100%{transform:translate(4px,4px);} }
+        
+        /* شقوق مبرمجة لضمان الظهور في سفاري */
+        #c { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: 9999; pointer-events: none; display: none; 
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cpath d='M0,0 L100,200 L50,300 L0,500 M100,0 L150,150 L100,400 L200,500 M200,0 L180,250 L250,350 L300,500 M500,0 L400,200 L450,400 M0,200 L500,250 M0,400 L500,380' stroke='white' stroke-width='3' fill='none'/%3E%3C/svg%3E");
+            background-size: cover; filter: drop-shadow(0 0 5px white);
         }
 
-        /* 1. مطر الأكواد (Matrix) */
-        #matrix-layer { display: block; }
-        canvas { display: block; filter: brightness(1.2); }
-
-        /* 2. الشبكة العصبية الهندسية */
-        #network-layer { background: black; }
-
-        /* 3. نافذة الأوامر ولوق الأخطاء */
-        #console-layer {
-            background: rgba(0, 20, 0, 0.9);
-            display: flex; flex-direction: column; padding: 10px;
-            box-sizing: border-box; font-size: 14px; line-height: 1.4;
-        }
-        .console-header {
-            border-bottom: 2px solid #0f0; padding-bottom: 5px; margin-bottom: 10px;
-            font-weight: bold; text-transform: uppercase; text-align: center;
-        }
-        .critical { color: red; animation: blink 0.5s infinite; }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* شقوق الشاشة (دائماً في الأعلى) */
-        #crack {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://i.imgur.com/8W7X9vH.png');
-            background-size: cover; z-index: 9999; pointer-events: none; display: none;
-            filter: invert(1) hue-rotate(90deg); /* جعل الشقوق خضراء */
+        #btn {
+            position: relative; z-index: 10001; color: white; text-align: center;
+            padding: 20px; top: 40%; background: rgba(255,0,0,0.1); border: 1px solid red;
+            margin: 20px; border-radius: 10px;
         }
     </style>
 </head>
-<body onclick="startChaos()">
+<body id="b">
 
-    <div id="crack"></div>
-
-    <div id="matrix-layer" class="layer"><canvas id="q"></canvas></div>
+    <div id="c"></div>
+    <div id="m" class="layer"><canvas id="q"></canvas></div>
+    <div id="s" class="layer"></div>
+    <div id="r" class="layer"><div class="t">SYSTEM_HALTED</div><div class="t" style="font-size:16px; color:white;">ACCESS_DENIED_IP_LOGGED</div></div>
     
-    <div id="network-layer" class="layer">
-        <svg width="100%" height="100%" style="opacity: 0.8">
-            <g stroke="#0f0" stroke-width="1.5">
-                <circle cx="50" cy="50" r="5" fill="#0f0"/>
-                <circle cx="150" cy="150" r="5" fill="#0f0"/>
-                <circle cx="250" cy="250" r="5" fill="#0f0"/>
-                <circle cx="100" cy="300" r="5" fill="#0f0"/>
-                <circle cx="300" cy="100" r="5" fill="#0f0"/>
-                <line x1="50" y1="50" x2="150" y2="150" />
-                <line x1="150" y1="150" x2="250" y2="250" />
-                <line x1="150" y1="150" x2="100" y2="300" />
-                <line x1="250" y1="250" x2="300" y2="100" />
-                <line x1="50" y1="50" x2="300" y2="100" animation="pulse 2s infinite" />
-            </g>
-        </svg>
-    </div>
-
-    <div id="console-layer" class="layer">
-        <div class="console-header">Root Access: Terminated</div>
-        <div id="console-log">
-            > Initializing bypass... [FAILED]<br>
-            > Accessing /user/private... [DENIED]<br>
-            > Attempting kernel override...<br>
-            <span class="critical">CRITICAL_ERROR: 0x88042</span><br>
-            > Dumping System32 drivers...
-        </div>
-    </div>
-
-    <div id="init-msg" style="color:#0f0; text-align:center; padding-top:40vh; z-index:10000; position:relative;">
-        <h1>⚠️ تم اكتشاف محاولة وصول</h1>
-        <p>انقر لتفعيل نظام الحماية الفوري</p>
+    <div id="btn" onclick="start()">
+        <h2 style="color:red; margin:0;">⚠️ تنبيه أمني</h2>
+        <p>تم اكتشاف فيروس، اضغط للتنظيف</p>
     </div>
 
     <script>
-        // كود مطر الأكواد (Matrix)
-        var s = window.screen;
-        var width = q.width = s.width;
-        var height = q.height = s.height;
-        var letters = Array(256).join(1).split('');
-        var draw = function () {
-            q.getContext('2d').fillStyle = 'rgba(0,0,0,.05)';
-            q.getContext('2d').fillRect(0,0,width,height);
-            q.getContext('2d').fillStyle = '#0F0'; /* لون المطر أخضر */
-            letters.map(function(y_pos, index){
-                text = String.fromCharCode(1e2+Math.random()*33);
-                x_pos = index * 10;
-                q.getContext('2d').fillText(text, x_pos, y_pos);
-                letters[index] = (y_pos > 758 + Math.random() * 1e4) ? 0 : y_pos + 10;
+        // Matrix Rain
+        var q = document.getElementById('q'), s = window.screen, w = q.width = s.width, h = q.height = s.height, p = Array(256).fill(0);
+        var ctx = q.getContext('2d');
+        function draw() {
+            ctx.fillStyle = 'rgba(0,0,0,.08)'; ctx.fillRect(0,0,w,h);
+            ctx.fillStyle = '#0F0'; ctx.font = '15pt monospace';
+            p.forEach((y, i) => {
+                ctx.fillText(String.fromCharCode(Math.random() * 128), i * 20, y);
+                p[i] = y > h + Math.random() * 1e4 ? 0 : y + 20;
             });
-        };
+        }
 
-        const errors = [
-            "ERROR: Buffer overflow",
-            "WARNING: Remote access detected",
-            "CRITICAL: CPU Core #3 offline",
-            "DUMP: /DCIM/Camera/ copied to remote",
-            "FAILED: Integrity check!",
-            "Kernel panic!"
-        ];
-
-        function startChaos() {
-            document.getElementById('init-msg').style.display = 'none';
-            document.getElementById('crack').style.display = 'block';
-            document.body.style.pointerEvents = "none"; // تعطيل اللمس
+        function start() {
+            // إخفاء الزر وإظهار الرعب
+            document.getElementById('btn').style.display = 'none';
+            document.getElementById('c').style.display = 'block';
+            
+            // قفل اللمس
+            document.getElementById('b').style.pointerEvents = "none";
 
             // تشغيل المطر
             setInterval(draw, 33);
 
-            // إضافة لوقات أخطاء للكونسول
-            setInterval(() => {
-                const log = document.getElementById('console-log');
-                const line = document.createElement('div');
-                line.innerHTML = `> ${errors[Math.floor(Math.random()*errors.length)]}`;
-                if(Math.random() > 0.7) line.className = 'critical';
-                log.appendChild(line);
-                if(log.children.length > 20) log.removeChild(log.firstChild);
-                log.parentElement.scrollTop = log.parentElement.scrollHeight;
-            }, 300);
-
-            // تبديل الأدوار كل ثانية (تقليب الشاشة)
-            const layers = [
-                document.getElementById('matrix-layer'),
-                document.getElementById('network-layer'),
-                document.getElementById('console-layer')
-            ];
-
-            let current = 0;
+            // تبديل الطبقات (سريع جداً)
+            let layers = [document.getElementById('m'), document.getElementById('s'), document.getElementById('r')];
+            let idx = 0;
             setInterval(() => {
                 layers.forEach(l => l.style.display = 'none');
-                layers[current].style.display = 'block';
-                current = (current + 1) % layers.length;
-                
-                // اهتزاز الجوال
-                if (navigator.vibrate) navigator.vibrate(200);
-            }, 1000);
+                layers[idx].style.display = 'block';
+                idx = (idx + 1) % layers.length;
+            }, 600);
 
-            // 🔊 صوت إنذار طوارئ حقيقي (EAS Alert)
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = audioCtx.createOscillator();
-            osc.type = 'sawtooth'; // صوت حاد
-            osc.frequency.value = 440; // نغمة حادة واحدة مستمرة
-            osc.connect(audioCtx.destination);
-            osc.start();
+            // 🔊 الصوت المتوافق مع سفاري
+            // لازم ننشئ الـ AudioContext داخل وظيفة الـ Click مباشرة
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            const audioCtx = new AudioContext();
             
-            // جعل الصوت يقطع (Beep Beep)
-            setInterval(() => {
-                if(osc.frequency.value === 440) osc.frequency.value = 0;
-                else osc.frequency.value = 440;
-            }, 500);
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime); // تردد الإنذار
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start();
 
-            // منع زر الرجوع
-            window.history.pushState(null, null, window.location.href);
-            window.onpopstate = function() { window.history.go(1); };
+            // جعل الصوت يقطع (Beep Beep) بشكل احترافي
+            setInterval(() => {
+                gain.gain.setValueAtTime(gain.gain.value === 0 ? 0.7 : 0, audioCtx.currentTime);
+            }, 150);
+
+            // اهتزاز (إذا كان مدعوم)
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
         }
     </script>
 </body>
