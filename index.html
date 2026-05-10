@@ -2,116 +2,94 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🚨 SYSTEM_FAILURE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CRITICAL_SYSTEM_ERROR</title>
     <style>
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: black; overflow: hidden; touch-action: none; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: black; overflow: hidden; touch-action: none; font-family: 'Courier New', Courier, monospace; }
         .layer { position: fixed; width: 100%; height: 100%; top: 0; left: 0; display: none; }
-        
         #m { display: block; background: black; }
-        canvas { display: block; }
-        
         #s { background: url('https://media.giphy.com/media/oEI9uWUicKgS2UzSsw/giphy.gif'); background-size: cover; opacity: 0.8; }
-        
-        #r { 
-            background: black; display: flex; justify-content: center; 
-            align-items: center; flex-direction: column; z-index: 2; 
-        }
-        .t { 
-            font-size: 32px; font-weight: 900; text-align: center;
-            animation: rb 0.1s infinite, sk 0.05s infinite; 
-        }
-
+        #r { background: black; display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 2; }
+        .t { font-size: 30px; font-weight: bold; animation: rb 0.1s infinite, sk 0.05s infinite; text-align: center; }
         @keyframes rb { 0%{color:red;} 33%{color:#0f0;} 66%{color:#00f;} 100%{color:red;} }
-        @keyframes sk { 0%{transform:translate(4px,4px);} 50%{transform:translate(-4px,-4px);} 100%{transform:translate(4px,4px);} }
+        @keyframes sk { 0%{transform:translate(5px,5px);} 50%{transform:translate(-5px,-5px);} 100%{transform:translate(5px,5px);} }
         
-        /* شقوق مبرمجة لضمان الظهور في سفاري */
+        /* شقوق مبرمجة أقوى */
         #c { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: 9999; pointer-events: none; display: none; 
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cpath d='M0,0 L100,200 L50,300 L0,500 M100,0 L150,150 L100,400 L200,500 M200,0 L180,250 L250,350 L300,500 M500,0 L400,200 L450,400 M0,200 L500,250 M0,400 L500,380' stroke='white' stroke-width='3' fill='none'/%3E%3C/svg%3E");
-            background-size: cover; filter: drop-shadow(0 0 5px white);
-        }
-
-        #btn {
-            position: relative; z-index: 10001; color: white; text-align: center;
-            padding: 20px; top: 40%; background: rgba(255,0,0,0.1); border: 1px solid red;
-            margin: 20px; border-radius: 10px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; display: none; 
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cpath d='M0,0 L200,300 L50,600 M300,0 L150,400 L400,800 M500,100 L200,450 L600,200' stroke='white' stroke-width='3' fill='none' opacity='0.7'/%3E%3C/svg%3E");
+            background-size: cover;
         }
     </style>
 </head>
-<body id="b">
-
+<body onclick="start()">
     <div id="c"></div>
     <div id="m" class="layer"><canvas id="q"></canvas></div>
     <div id="s" class="layer"></div>
-    <div id="r" class="layer"><div class="t">SYSTEM_HALTED</div><div class="t" style="font-size:16px; color:white;">ACCESS_DENIED_IP_LOGGED</div></div>
+    <div id="r" class="layer"><div class="t">HARDWARE_FAILURE</div><div class="t" style="font-size:15px">VOLTAGE_OVERLOAD_DETECTED</div></div>
     
-    <div id="btn" onclick="start()">
-        <h2 style="color:red; margin:0;">⚠️ تنبيه أمني</h2>
-        <p>تم اكتشاف فيروس، اضغط للتنظيف</p>
+    <div id="btn" style="color:white; text-align:center; padding-top:40vh; z-index:10001; position:relative;">
+        <h1 style="color:red; font-size:40px;">⚠️</h1>
+        <p>جاري فحص أمان المعالج...</p>
+        <p style="color:#555;">انقر للاستمرار</p>
     </div>
 
     <script>
-        // Matrix Rain
-        var q = document.getElementById('q'), s = window.screen, w = q.width = s.width, h = q.height = s.height, p = Array(256).fill(0);
-        var ctx = q.getContext('2d');
+        var q = document.getElementById('q'), ctx = q.getContext('2d'), s = window.screen, w = q.width = s.width, h = q.height = s.height, p = Array(256).fill(0);
         function draw() {
-            ctx.fillStyle = 'rgba(0,0,0,.08)'; ctx.fillRect(0,0,w,h);
-            ctx.fillStyle = '#0F0'; ctx.font = '15pt monospace';
-            p.forEach((y, i) => {
-                ctx.fillText(String.fromCharCode(Math.random() * 128), i * 20, y);
-                p[i] = y > h + Math.random() * 1e4 ? 0 : y + 20;
-            });
+            ctx.fillStyle = 'rgba(0,0,0,.05)'; ctx.fillRect(0,0,w,h); ctx.fillStyle = '#0F0';
+            p.map((y, i) => { ctx.fillText(String.fromCharCode(1e2+Math.random()*33), i*10, y); p[i] = y > 758 + Math.random()*1e4 ? 0 : y+10; });
         }
 
         function start() {
-            // إخفاء الزر وإظهار الرعب
+            // محاولة قفل المتصفح في وضع ملء الشاشة
+            if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+            
             document.getElementById('btn').style.display = 'none';
             document.getElementById('c').style.display = 'block';
-            
-            // قفل اللمس
-            document.getElementById('b').style.pointerEvents = "none";
-
-            // تشغيل المطر
+            document.body.style.pointerEvents = "none";
             setInterval(draw, 33);
-
-            // تبديل الطبقات (سريع جداً)
+            
             let layers = [document.getElementById('m'), document.getElementById('s'), document.getElementById('r')];
-            let idx = 0;
+            let curr = 0;
             setInterval(() => {
                 layers.forEach(l => l.style.display = 'none');
-                layers[idx].style.display = 'block';
-                idx = (idx + 1) % layers.length;
+                layers[curr].style.display = 'block';
+                curr = (curr + 1) % layers.length;
             }, 600);
 
-            // 🔊 الصوت المتوافق مع سفاري
-            // لازم ننشئ الـ AudioContext داخل وظيفة الـ Click مباشرة
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            const audioCtx = new AudioContext();
+            // 🔊 خلطة الصوت المرعب (Distortion + Noise)
+            const ac = new (window.AudioContext || window.webkitAudioContext)();
             
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
+            // توليد ضوضاء بيضاء (صوت وشوشة التلفاز القوي)
+            const bufferSize = 2 * ac.sampleRate, buffer = ac.createBuffer(1, bufferSize, ac.sampleRate), output = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) { output[i] = Math.random() * 2 - 1; }
             
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(440, audioCtx.currentTime); // تردد الإنذار
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start();
+            const noise = ac.createBufferSource();
+            noise.buffer = buffer;
+            noise.loop = true;
 
-            // جعل الصوت يقطع (Beep Beep) بشكل احترافي
+            const filter = ac.createBiquadFilter();
+            filter.type = "lowpass";
+            filter.frequency.value = 1000;
+
+            const gain = ac.createGain();
+            noise.connect(filter); filter.connect(gain); gain.connect(ac.destination);
+            
+            noise.start();
+            gain.gain.value = 0.8;
+
+            // صوت طنين حاد يقطع الضوضاء
             setInterval(() => {
-                gain.gain.setValueAtTime(gain.gain.value === 0 ? 0.7 : 0, audioCtx.currentTime);
-            }, 150);
-
-            // اهتزاز (إذا كان مدعوم)
-            if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                const osc = ac.createOscillator();
+                osc.type = 'sawtooth';
+                osc.frequency.value = 200 + Math.random() * 800;
+                const g = ac.createGain();
+                osc.connect(g); g.connect(ac.destination);
+                g.gain.value = 0.3;
+                osc.start();
+                setTimeout(() => osc.stop(), 100);
+            }, 200);
         }
     </script>
 </body>
