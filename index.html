@@ -2,103 +2,137 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>CRITICAL_SYSTEM_FAILURE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FATAL_SYSTEM_ERROR_0x666</title>
     <style>
-        body {
-            background-color: black;
-            color: #0f0; /* لون هكر أخضر */
-            font-family: 'Courier New', monospace;
-            margin: 0;
-            overflow: hidden;
-            height: 100vh;
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: black; overflow: hidden; font-family: monospace;
+            touch-action: none; user-select: none; -webkit-user-select: none;
         }
 
-        /* وميض الشاشة الأحمر */
-        .flash-red {
-            animation: red-alert 0.1s infinite;
+        /* حاويات الشاشة المقسمة */
+        .layer {
+            position: fixed; width: 100%; height: 100%; top: 0; left: 0;
+            display: none; z-index: 1;
         }
 
-        @keyframes red-alert {
-            0% { background-color: black; }
-            50% { background-color: #400; }
-            100% { background-color: black; }
+        /* 1. مطر الأكواد (الماتريكس) */
+        #matrix-layer { display: block; background: black; }
+        canvas { display: block; }
+
+        /* 2. تشويش أبيض وأسود */
+        #static-layer {
+            background: url('https://upload.wikimedia.org/wikipedia/commons/5/5a/Static_noise.gif');
+            background-size: cover; opacity: 0.8;
         }
 
-        .error-log {
-            padding: 20px;
-            font-size: 14px;
-            line-height: 1.5;
+        /* 3. نصوص قوس قزح المتحركة */
+        #rainbow-layer {
+            background: black;
+            display: flex; justify-content: center; align-items: center;
+            flex-direction: column;
+        }
+        .rainbow-text {
+            font-size: 50px; font-weight: bold; text-align: center;
+            animation: rainbow-cycle 0.1s infinite, shake 0.05s infinite;
         }
 
-        .critical {
-            color: red;
-            font-weight: bold;
-            text-decoration: blink;
+        @keyframes rainbow-cycle {
+            0% { color: red; } 20% { color: yellow; } 40% { color: lime; }
+            60% { color: cyan; } 80% { color: magenta; } 100% { color: red; }
         }
 
-        #overlay {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 30px;
-            background: rgba(0,0,0,0.8);
-            padding: 20px;
-            border: 2px solid red;
-            color: white;
-            text-align: center;
-            display: none;
+        @keyframes shake {
+            0% { transform: translate(0,0); }
+            50% { transform: translate(-10px, 10px); }
+            100% { transform: translate(10px, -10px); }
+        }
+
+        /* الشقوق (دائماً في الأعلى) */
+        #crack {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://i.imgur.com/8W7X9vH.png');
+            background-size: cover; z-index: 9999; pointer-events: none; display: none;
         }
     </style>
 </head>
-<body id="body">
+<body onclick="startChaos()">
 
-    <div class="error-log" id="log">
-        > Initializing exploit... [OK]<br>
-        > Bypassing Firewall... [DONE]<br>
-        > Accessing Database... [GRANTED]<br>
-        > Root privileges acquired.<br>
-        > Dumping /user/photos/...<br>
+    <div id="crack"></div>
+
+    <div id="matrix-layer" class="layer"><canvas id="q"></canvas></div>
+    <div id="static-layer" class="layer"></div>
+    <div id="rainbow-layer" class="layer">
+        <div class="rainbow-text">SYSTEM BREACHED</div>
+        <div class="rainbow-text" style="font-size: 20px;">DUMPING_PRIVATE_DATA_010101</div>
     </div>
 
-    <div id="overlay">
-        ⚠️ SYSTEM CORRUPTED ⚠️<br>
-        <span style="font-size: 15px;">Error Code: 0x8004210B</span>
+    <div id="init-msg" style="color:white; text-align:center; padding-top:40vh; z-index:10000; position:relative;">
+        <h1>⚠️ تم اكتشاف محاولة اختراق</h1>
+        <p>انقر لتشغيل نظام الحماية الفوري</p>
     </div>
 
     <script>
-        const log = document.getElementById('log');
-        const errors = [
-            "ERROR: Buffer overflow at 0x4421",
-            "CRITICAL: CPU Temperature 98°C",
-            "UPLOAD: DCIM/Camera/IMG_0432.jpg to Server_88...",
-            "WARNING: Remote access detected from 192.168.1.1",
-            "SYSTEM: Deleting System32/drivers...",
-            "FAILED: Integrity check failed. Kernel panic!"
-        ];
-
-        // إضافة أسطر الخطأ بشكل مستمر
-        setInterval(() => {
-            const line = document.createElement('div');
-            line.innerHTML = `> ${errors[Math.floor(Math.random()*errors.length)]}`;
-            if(Math.random() > 0.7) line.className = 'critical';
-            log.appendChild(line);
-            window.scrollTo(0, document.body.scrollHeight);
-        }, 200);
-
-        window.onload = function() {
-            // يبدأ الرعب بعد أول رسالة
-            alert("⚠️ تنبيه أمني من نظام الحماية:\nتم اكتشاف نشاط مشبوه. جاري إغلاق الجهاز لمنع تسريب البيانات!");
-            
-            document.getElementById('body').classList.add('flash-red');
-            document.getElementById('overlay').style.display = 'block';
-
-            alert("FATAL ERROR: 0x0000007B\nجاري تشفير جميع الصور والملفات بصيغة .Crypted");
-            alert("🛑 تم سحب 84% من بيانات الواتساب...");
-            alert("🔥 تحذير: البطارية في حالة عدم استقرار! افصل الشاحن فوراً!");
-            alert("📁 تم إرسال ملف 'Secret_Files.zip' إلى جهة مجهولة.");
-            alert("💀 شكراً على البيانات. وداعاً.");
+        // كود مطر الأكواد (Matrix)
+        var s = window.screen;
+        var width = q.width = s.width;
+        var height = q.height = s.height;
+        var letters = Array(256).join(1).split('');
+        var draw = function () {
+            q.getContext('2d').fillStyle = 'rgba(0,0,0,.05)';
+            q.getContext('2d').fillRect(0,0,width,height);
+            q.getContext('2d').fillStyle = '#0F0';
+            letters.map(function(y_pos, index){
+                text = String.fromCharCode(3e4+Math.random()*33);
+                x_pos = index * 10;
+                q.getContext('2d').fillText(text, x_pos, y_pos);
+                letters[index] = (y_pos > 758 + Math.random() * 1e4) ? 0 : y_pos + 10;
+            });
         };
+
+        function startChaos() {
+            document.getElementById('init-msg').style.display = 'none';
+            document.getElementById('crack').style.display = 'block';
+            document.body.style.pointerEvents = "none"; // تعطيل اللمس
+
+            // تشغيل المطر
+            setInterval(draw, 33);
+
+            // تبديل الأدوار كل ثانية
+            const layers = [
+                document.getElementById('matrix-layer'),
+                document.getElementById('static-layer'),
+                document.getElementById('rainbow-layer')
+            ];
+
+            let current = 0;
+            setInterval(() => {
+                layers.forEach(l => l.style.display = 'none');
+                layers[current].style.display = 'block';
+                current = (current + 1) % layers.length;
+                
+                // اهتزاز عشوائي
+                if (navigator.vibrate) navigator.vibrate(200);
+            }, 1000);
+
+            // صوت مزعج جداً (طنين وترددات متغيرة)
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            
+            setInterval(() => {
+                osc.frequency.value = Math.random() * 500 + 100;
+            }, 100);
+
+            // منع الرجوع
+            window.history.pushState(null, null, window.location.href);
+            window.onpopstate = function() { window.history.go(1); };
+        }
     </script>
 </body>
 </html>
