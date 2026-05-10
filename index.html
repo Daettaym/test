@@ -3,103 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TERMINAL_ERROR_V8</title>
+    <title>🚨 SYSTEM_DESTRUCTION</title>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: black; overflow: hidden; font-family: monospace; }
-        
-        /* طبقة حماية تمنع اللمس نهائياً بعد التفعيل */
-        #touch-blocker {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 100000; display: none; touch-action: none;
-        }
-
-        .layer { position: fixed; width: 100%; height: 100%; top: 0; left: 0; display: none; z-index: 1; }
-        
-        #m { display: block; background: black; } /* الماتريكس */
-        #s { background: url('https://media.giphy.com/media/oEI9uWUicKgS2UzSsw/giphy.gif'); background-size: cover; } /* التشويش */
-        
-        /* نصوص قوس قزح السريعة جداً */
-        #r { background: black; display: flex; justify-content: center; align-items: center; z-index: 2; }
-        .t { font-size: 40px; font-weight: bold; animation: rb 0.05s infinite, sk 0.03s infinite; text-align: center; }
-
-        @keyframes rb { 0%{color:#ff0000;} 20%{color:#00ff00;} 40%{color:#0000ff;} 60%{color:#ffff00;} 80%{color:#ff00ff;} 100%{color:#ff0000;} }
-        @keyframes sk { 0%{transform:translate(8px, -8px);} 50%{transform:translate(-8px, 8px);} 100%{transform:translate(8px, -8px);} }
-        
-        /* شقوق زجاجية مبرمجة SVG (مضمونة الظهور) */
-        #c { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: 99999; pointer-events: none; display: none; 
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cpath d='M0,0 L500,500 M500,0 L0,500 M250,0 L250,500 M0,250 L500,250 M100,0 L400,500 M0,100 L500,400' stroke='white' stroke-width='3' stroke-opacity='0.7'/%3E%3C/svg%3E");
-            background-size: cover;
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: black; overflow: hidden; touch-action: none; font-family: monospace; }
+        .layer { position: fixed; width: 100%; height: 100%; top: 0; left: 0; display: none; }
+        #m { display: block; background: black; }
+        canvas { display: block; filter: brightness(1.2); }
+        #s { background: url('https://media.giphy.com/media/oEI9uWUicKgS2UzSsw/giphy.gif'); background-size: cover; opacity: 0.9; }
+        #r { background: black; display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 2; }
+        .t { font-size: 38px; font-weight: bold; animation: rb 0.05s infinite, sk 0.03s infinite; text-align: center; }
+        @keyframes rb { 0%{color:red;} 20%{color:yellow;} 40%{color:lime;} 60%{color:cyan;} 80%{color:magenta;} 100%{color:white;} }
+        @keyframes sk { 0%{transform:translate(8px,8px);} 50%{transform:translate(-8px,-8px);} 100%{transform:translate(8px,8px);} }
+        #c { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; pointer-events: none; display: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cpath d='M0,0 L150,250 L0,500 M500,0 L350,250 L500,500 M0,250 L500,250 M250,0 L250,500' stroke='white' stroke-width='3' fill='none'/%3E%3Cpath d='M50,50 L100,100 M400,400 L450,450 M100,400 L50,450' stroke='white' stroke-width='2'/%3E%3C/svg%3E"); background-size: cover; filter: drop-shadow(0 0 10px white); }
     </style>
 </head>
-<body onclick="launch()">
-
-    <div id="touch-blocker"></div>
+<body onclick="start()">
     <div id="c"></div>
     <div id="m" class="layer"><canvas id="q"></canvas></div>
     <div id="s" class="layer"></div>
-    <div id="r" class="layer"><div class="t">SYSTEM DESTROYED<br>0x000666</div></div>
-    
-    <div id="intro" style="color:white; text-align:center; padding-top:45vh; z-index:5; position:relative;">
-        <h2 style="color:red;">CRITICAL UPDATE REQUIRED</h2>
-        <p>انقر لإصلاح أعطال الذاكرة فوراً</p>
+    <div id="r" class="layer"><div class="t">⚠️ CORE ERROR ⚠️</div><div class="t" style="font-size:16px; color:white;">MEMORY_DUMP_IN_PROGRESS...</div></div>
+    <div id="btn" style="color:white; text-align:center; padding-top:40vh; z-index:10001; position:relative;">
+        <h1 style="color:red; font-size:40px;">CRITICAL</h1>
+        <p>انقر لإيقاف التدمير الذاتي</p>
     </div>
 
     <script>
-        var q = document.getElementById('q'), s = window.screen, w = q.width = s.width, h = q.height = s.height, p = Array(256).join(1).split('');
+        var q = document.getElementById('q'), ctx = q.getContext('2d'), s = window.screen, w = q.width = s.width, h = q.height = s.height, p = Array(256).join(1).split('');
         var draw = function () {
-            var ctx = q.getContext('2d');
-            ctx.fillStyle = 'rgba(0,0,0,.08)'; ctx.fillRect(0,0,w,h); ctx.fillStyle = '#0F0';
-            ctx.font = '15pt monospace';
+            ctx.fillStyle = 'rgba(0,0,0,.1)'; ctx.fillRect(0,0,w,h); ctx.fillStyle = '#0F0';
             p.map(function(y, i){ ctx.fillText(String.fromCharCode(1e2+Math.random()*33), i*10, y); p[i] = (y > 758 + Math.random()*1e4) ? 0 : y+10; });
         };
 
-        function launch() {
-            // 1. تعطيل اللمس نهائياً
-            document.getElementById('touch-blocker').style.display = 'block';
-            document.getElementById('intro').style.display = 'none';
+        function start() {
+            document.getElementById('btn').style.display = 'none';
             document.getElementById('c').style.display = 'block';
+            document.body.style.pointerEvents = "none";
+            setInterval(draw, 33);
             
-            // 2. تشغيل الأنيميشن
-            setInterval(draw, 30);
             let layers = [document.getElementById('m'), document.getElementById('s'), document.getElementById('r')];
-            let i = 0;
+            let curr = 0;
             setInterval(() => {
                 layers.forEach(l => l.style.display = 'none');
-                layers[i].style.display = 'block';
-                i = (i + 1) % layers.length;
+                layers[curr].style.display = 'block';
+                curr = (curr + 1) % layers.length;
                 if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
-            }, 800);
+            }, 600);
 
-            // 3. 🔊 الصوت "المرعب" (ترددات EAS Alert)
+            // 🔊 محرك الصوت "الخشن" (Industrial Alarm Noise)
             const ac = new (window.AudioContext || window.webkitAudioContext)();
             
-            function playTone(freq, type) {
+            function playNoise() {
+                const bufferSize = ac.sampleRate * 0.2; // مدة الصوت قصيرة جداً
+                const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1; // توليد ضوضاء بيضاء (White Noise)
+                }
+                const noise = ac.createBufferSource();
+                noise.buffer = buffer;
+                
+                const filter = ac.createBiquadFilter();
+                filter.type = "lowpass"; // يخلي الصوت مكتوم وخشن
+                filter.frequency.value = 800;
+
                 const osc = ac.createOscillator();
-                const gn = ac.createGain();
-                osc.type = type;
-                osc.frequency.value = freq;
-                osc.connect(gn);
-                gn.connect(ac.destination);
+                osc.type = 'sawtooth';
+                osc.frequency.value = 120; // تردد منخفض مرعب
+
+                const gain = ac.createGain();
+                gain.gain.value = 0.8;
+
+                noise.connect(filter);
+                filter.connect(gain);
+                osc.connect(gain);
+                gain.connect(ac.destination);
+
+                noise.start();
                 osc.start();
-                // تقطيع الصوت لجعله كأنه إنذار حقيقي
-                setInterval(() => {
-                    gn.gain.value = gn.gain.value === 0 ? 0.4 : 0;
-                }, 400);
+                
+                // يطفي الصوت بسرعة عشان يسوي تقطيع (Beep)
+                setTimeout(() => {
+                    noise.stop();
+                    osc.stop();
+                }, 150);
             }
 
-            playTone(853, 'sine'); // التردد الأول للإنذار
-            playTone(960, 'sine'); // التردد الثاني (تداخلهم يسبب رعب)
-            
-            // إضافة صوت "خراب" (White Noise)
-            const bufferSize = 2 * ac.sampleRate, noiseBuffer = ac.createBuffer(1, bufferSize, ac.sampleRate), output = noiseBuffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) { output[i] = Math.random() * 2 - 1; }
-            const noise = ac.createBufferSource(); noise.buffer = noiseBuffer; noise.loop = true;
-            const noiseGain = ac.createGain(); noiseGain.gain.value = 0.05;
-            noise.connect(noiseGain); noiseGain.connect(ac.destination);
-            noise.start();
+            // تكرار الصوت "الخشن" بشكل مستمر
+            setInterval(playNoise, 300);
         }
     </script>
 </body>
