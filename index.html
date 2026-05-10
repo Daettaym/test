@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FATAL_SYSTEM_ERROR_0x666</title>
+    <title>FATAL_ERROR_666</title>
     <style>
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background: black; overflow: hidden; font-family: monospace;
-            touch-action: none; user-select: none; -webkit-user-select: none;
+            /* تعطيل اللمس والتحكم */
+            touch-action: none; -webkit-user-select: none; user-select: none;
         }
 
-        /* حاويات الشاشة المقسمة */
+        /* حاويات الشاشة */
         .layer {
             position: fixed; width: 100%; height: 100%; top: 0; left: 0;
             display: none; z-index: 1;
@@ -21,20 +22,19 @@
         #matrix-layer { display: block; background: black; }
         canvas { display: block; }
 
-        /* 2. تشويش أبيض وأسود */
+        /* 2. تشويش أبيض وأسود (Static Noise) */
         #static-layer {
             background: url('https://upload.wikimedia.org/wikipedia/commons/5/5a/Static_noise.gif');
-            background-size: cover; opacity: 0.8;
+            background-size: cover; opacity: 0.9;
         }
 
-        /* 3. نصوص قوس قزح المتحركة */
+        /* 3. نصوص قوس قزح السريعة */
         #rainbow-layer {
             background: black;
-            display: flex; justify-content: center; align-items: center;
-            flex-direction: column;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
         }
         .rainbow-text {
-            font-size: 50px; font-weight: bold; text-align: center;
+            font-size: 45px; font-weight: bold; text-align: center;
             animation: rainbow-cycle 0.1s infinite, shake 0.05s infinite;
         }
 
@@ -44,12 +44,12 @@
         }
 
         @keyframes shake {
-            0% { transform: translate(0,0); }
-            50% { transform: translate(-10px, 10px); }
-            100% { transform: translate(10px, -10px); }
+            0% { transform: translate(-5px, 5px); }
+            50% { transform: translate(5px, -5px); }
+            100% { transform: translate(-5px, 5px); }
         }
 
-        /* الشقوق (دائماً في الأعلى) */
+        /* شقوق الشاشة (فوق كل شيء) */
         #crack {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://i.imgur.com/8W7X9vH.png');
@@ -64,13 +64,13 @@
     <div id="matrix-layer" class="layer"><canvas id="q"></canvas></div>
     <div id="static-layer" class="layer"></div>
     <div id="rainbow-layer" class="layer">
-        <div class="rainbow-text">SYSTEM BREACHED</div>
-        <div class="rainbow-text" style="font-size: 20px;">DUMPING_PRIVATE_DATA_010101</div>
+        <div class="rainbow-text">SYSTEM FAILURE</div>
+        <div class="rainbow-text" style="font-size: 20px;">WIPING_ALL_DATA...</div>
     </div>
 
-    <div id="init-msg" style="color:white; text-align:center; padding-top:40vh; z-index:10000; position:relative;">
-        <h1>⚠️ تم اكتشاف محاولة اختراق</h1>
-        <p>انقر لتشغيل نظام الحماية الفوري</p>
+    <div id="init-msg" style="color:white; text-align:center; padding-top:45vh; z-index:10000; position:relative;">
+        <h2 style="color:red;">⚠️ WARNING</h2>
+        <p>انقر هنا لتحديث النظام</p>
     </div>
 
     <script>
@@ -92,14 +92,17 @@
         };
 
         function startChaos() {
+            // إخفاء رسالة البداية وتفعيل الرعب
             document.getElementById('init-msg').style.display = 'none';
             document.getElementById('crack').style.display = 'block';
-            document.body.style.pointerEvents = "none"; // تعطيل اللمس
+            
+            // قفل اللمس والتحكم بعد أول ضغطة
+            document.body.style.pointerEvents = "none";
 
-            // تشغيل المطر
+            // تشغيل المطر في الخلفية
             setInterval(draw, 33);
 
-            // تبديل الأدوار كل ثانية
+            // تبديل الأدوار (كل ثانية تتغير الشاشة)
             const layers = [
                 document.getElementById('matrix-layer'),
                 document.getElementById('static-layer'),
@@ -112,11 +115,11 @@
                 layers[current].style.display = 'block';
                 current = (current + 1) % layers.length;
                 
-                // اهتزاز عشوائي
+                // اهتزاز الجوال
                 if (navigator.vibrate) navigator.vibrate(200);
             }, 1000);
 
-            // صوت مزعج جداً (طنين وترددات متغيرة)
+            // صوت طنين عالي وترددات عشوائية
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
@@ -124,12 +127,11 @@
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
-            
             setInterval(() => {
-                osc.frequency.value = Math.random() * 500 + 100;
+                osc.frequency.value = Math.random() * 600 + 100;
             }, 100);
 
-            // منع الرجوع
+            // منع زر الرجوع
             window.history.pushState(null, null, window.location.href);
             window.onpopstate = function() { window.history.go(1); };
         }
