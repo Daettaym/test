@@ -3,78 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FATAL_ERROR_666</title>
+    <title>SYSTEM_CRITICAL_FAILURE</title>
     <style>
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background: black; overflow: hidden; font-family: monospace;
-            /* تعطيل اللمس والتحكم */
-            touch-action: none; -webkit-user-select: none; user-select: none;
+            touch-action: none;
         }
 
-        /* حاويات الشاشة */
-        .layer {
-            position: fixed; width: 100%; height: 100%; top: 0; left: 0;
-            display: none; z-index: 1;
+        /* شقوق الشاشة - صورة بديلة ومؤكدة */
+        #crack {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/cracked-glass.png'), 
+                        url('https://pngimg.com/uploads/broken_glass/broken_glass_PNG30.png');
+            background-size: cover; z-index: 10000; pointer-events: none; display: none;
+            filter: invert(1);
         }
 
-        /* 1. مطر الأكواد (الماتريكس) */
+        .layer { position: fixed; width: 100%; height: 100%; top: 0; left: 0; display: none; z-index: 1; }
+
+        /* مطر الأكواد */
         #matrix-layer { display: block; background: black; }
-        canvas { display: block; }
+        canvas { display: block; filter: brightness(1.5); }
 
-        /* 2. تشويش أبيض وأسود (Static Noise) */
+        /* تشويش أبيض وأسود */
         #static-layer {
-            background: url('https://upload.wikimedia.org/wikipedia/commons/5/5a/Static_noise.gif');
-            background-size: cover; opacity: 0.9;
+            background: url('https://media.giphy.com/media/oEI9uWUicKgS2UzSsw/giphy.gif');
+            background-size: cover; opacity: 0.8;
         }
 
-        /* 3. نصوص قوس قزح السريعة */
+        /* نصوص قوس قزح */
         #rainbow-layer {
-            background: black;
-            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            background: black; display: flex; justify-content: center; align-items: center; flex-direction: column;
         }
         .rainbow-text {
-            font-size: 45px; font-weight: bold; text-align: center;
-            animation: rainbow-cycle 0.1s infinite, shake 0.05s infinite;
+            font-size: 40px; font-weight: bold; text-align: center;
+            animation: rainbow 0.1s infinite, shake 0.05s infinite;
         }
 
-        @keyframes rainbow-cycle {
-            0% { color: red; } 20% { color: yellow; } 40% { color: lime; }
-            60% { color: cyan; } 80% { color: magenta; } 100% { color: red; }
+        @keyframes rainbow {
+            0% { color: #ff0000; } 25% { color: #00ff00; } 50% { color: #0000ff; } 75% { color: #ffff00; } 100% { color: #ff00ff; }
         }
 
         @keyframes shake {
-            0% { transform: translate(-5px, 5px); }
-            50% { transform: translate(5px, -5px); }
-            100% { transform: translate(-5px, 5px); }
-        }
-
-        /* شقوق الشاشة (فوق كل شيء) */
-        #crack {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://i.imgur.com/8W7X9vH.png');
-            background-size: cover; z-index: 9999; pointer-events: none; display: none;
+            0% { transform: translate(-10px, 5px); } 50% { transform: translate(10px, -5px); } 100% { transform: translate(-5px, 10px); }
         }
     </style>
 </head>
-<body onclick="startChaos()">
+<body onclick="launchChaos()">
 
     <div id="crack"></div>
-
     <div id="matrix-layer" class="layer"><canvas id="q"></canvas></div>
     <div id="static-layer" class="layer"></div>
     <div id="rainbow-layer" class="layer">
-        <div class="rainbow-text">SYSTEM FAILURE</div>
-        <div class="rainbow-text" style="font-size: 20px;">WIPING_ALL_DATA...</div>
+        <div class="rainbow-text">CORE_SYSTEM_FAILURE</div>
+        <div class="rainbow-text" style="font-size: 15px;">WIPING_PRIVATE_STORAGE_88%</div>
     </div>
 
-    <div id="init-msg" style="color:white; text-align:center; padding-top:45vh; z-index:10000; position:relative;">
-        <h2 style="color:red;">⚠️ WARNING</h2>
-        <p>انقر هنا لتحديث النظام</p>
+    <div id="start" style="color:white; text-align:center; padding-top:45vh; position:relative; z-index:10001;">
+        <h2 style="color:red; animation: blink 0.5s infinite;">⚠️ SYSTEM ERROR</h2>
+        <p>انقر لإصلاح أخطاء النظام</p>
     </div>
 
     <script>
-        // كود مطر الأكواد (Matrix)
+        // Matrix Code
         var s = window.screen;
         var width = q.width = s.width;
         var height = q.height = s.height;
@@ -84,42 +76,33 @@
             q.getContext('2d').fillRect(0,0,width,height);
             q.getContext('2d').fillStyle = '#0F0';
             letters.map(function(y_pos, index){
-                text = String.fromCharCode(3e4+Math.random()*33);
-                x_pos = index * 10;
-                q.getContext('2d').fillText(text, x_pos, y_pos);
+                text = String.fromCharCode(1e2+Math.random()*33);
+                q.getContext('2d').fillText(text, index * 10, y_pos);
                 letters[index] = (y_pos > 758 + Math.random() * 1e4) ? 0 : y_pos + 10;
             });
         };
 
-        function startChaos() {
-            // إخفاء رسالة البداية وتفعيل الرعب
-            document.getElementById('init-msg').style.display = 'none';
+        function launchChaos() {
+            document.getElementById('start').style.display = 'none';
             document.getElementById('crack').style.display = 'block';
-            
-            // قفل اللمس والتحكم بعد أول ضغطة
-            document.body.style.pointerEvents = "none";
-
-            // تشغيل المطر في الخلفية
+            document.body.style.pointerEvents = "none"; 
             setInterval(draw, 33);
 
-            // تبديل الأدوار (كل ثانية تتغير الشاشة)
             const layers = [
                 document.getElementById('matrix-layer'),
                 document.getElementById('static-layer'),
                 document.getElementById('rainbow-layer')
             ];
 
-            let current = 0;
+            let i = 0;
             setInterval(() => {
                 layers.forEach(l => l.style.display = 'none');
-                layers[current].style.display = 'block';
-                current = (current + 1) % layers.length;
-                
-                // اهتزاز الجوال
-                if (navigator.vibrate) navigator.vibrate(200);
-            }, 1000);
+                layers[i].style.display = 'block';
+                i = (i + 1) % layers.length;
+                if (navigator.vibrate) navigator.vibrate(100);
+            }, 800); // تبديل كل أقل من ثانية لزيادة الرعب
 
-            // صوت طنين عالي وترددات عشوائية
+            // صوت طنين إلكتروني مزعج جداً
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
@@ -127,13 +110,7 @@
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
-            setInterval(() => {
-                osc.frequency.value = Math.random() * 600 + 100;
-            }, 100);
-
-            // منع زر الرجوع
-            window.history.pushState(null, null, window.location.href);
-            window.onpopstate = function() { window.history.go(1); };
+            setInterval(() => { osc.frequency.value = Math.random() * 800 + 200; }, 50);
         }
     </script>
 </body>
