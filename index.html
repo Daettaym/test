@@ -2,54 +2,102 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>⚠️ WARNING ⚠️</title>
+    <title>CRITICAL_SYSTEM_FAILURE</title>
     <style>
         body {
             background-color: black;
-            color: white;
+            color: #0f0; /* لون هكر أخضر */
+            font-family: 'Courier New', monospace;
             margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             overflow: hidden;
-            font-family: sans-serif;
+            height: 100vh;
         }
 
-        /* هذا هو تأثير "تطفي وتشتغل" باللون الأحمر */
-        .emergency-mode {
-            animation: flash 0.1s infinite;
+        /* وميض الشاشة الأحمر */
+        .flash-red {
+            animation: red-alert 0.1s infinite;
         }
 
-        @keyframes flash {
+        @keyframes red-alert {
             0% { background-color: black; }
-            50% { background-color: red; }
+            50% { background-color: #400; }
             100% { background-color: black; }
         }
 
-        .text {
-            font-size: 40px;
+        .error-log {
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .critical {
+            color: red;
             font-weight: bold;
+            text-decoration: blink;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            border: 2px solid red;
+            color: white;
             text-align: center;
-            z-index: 10;
-            text-shadow: 0 0 10px #000;
+            display: none;
         }
     </style>
 </head>
-<body id="bg">
+<body id="body">
 
-    <div class="text" id="msg">SYSTEM FAILURE</div>
+    <div class="error-log" id="log">
+        > Initializing exploit... [OK]<br>
+        > Bypassing Firewall... [DONE]<br>
+        > Accessing Database... [GRANTED]<br>
+        > Root privileges acquired.<br>
+        > Dumping /user/photos/...<br>
+    </div>
+
+    <div id="overlay">
+        ⚠️ SYSTEM CORRUPTED ⚠️<br>
+        <span style="font-size: 15px;">Error Code: 0x8004210B</span>
+    </div>
 
     <script>
-        window.onload = function() {
-            // أول ما تظهر الرسالة، تبدأ الشاشة "تطفي وتشتغل" خلف الكواليس
-            document.getElementById('bg').classList.add('emergency-mode');
-            document.getElementById('msg').innerText = "⚠️ SYSTEM HACKED ⚠️";
+        const log = document.getElementById('log');
+        const errors = [
+            "ERROR: Buffer overflow at 0x4421",
+            "CRITICAL: CPU Temperature 98°C",
+            "UPLOAD: DCIM/Camera/IMG_0432.jpg to Server_88...",
+            "WARNING: Remote access detected from 192.168.1.1",
+            "SYSTEM: Deleting System32/drivers...",
+            "FAILED: Integrity check failed. Kernel panic!"
+        ];
 
-            alert("🚨 تهديد أمني: تم اختراق ملفات النظام!");
-            alert("🔥 تحذير: المعالج وصل لدرجة حرارة خطيرة!");
-            alert("📱 جاري مسح جميع الصور والمحادثات...");
-            alert("💀 تمت العملية بنجاح. وداعاً!");
+        // إضافة أسطر الخطأ بشكل مستمر
+        setInterval(() => {
+            const line = document.createElement('div');
+            line.innerHTML = `> ${errors[Math.floor(Math.random()*errors.length)]}`;
+            if(Math.random() > 0.7) line.className = 'critical';
+            log.appendChild(line);
+            window.scrollTo(0, document.body.scrollHeight);
+        }, 200);
+
+        window.onload = function() {
+            // يبدأ الرعب بعد أول رسالة
+            alert("⚠️ تنبيه أمني من نظام الحماية:\nتم اكتشاف نشاط مشبوه. جاري إغلاق الجهاز لمنع تسريب البيانات!");
+            
+            document.getElementById('body').classList.add('flash-red');
+            document.getElementById('overlay').style.display = 'block';
+
+            alert("FATAL ERROR: 0x0000007B\nجاري تشفير جميع الصور والملفات بصيغة .Crypted");
+            alert("🛑 تم سحب 84% من بيانات الواتساب...");
+            alert("🔥 تحذير: البطارية في حالة عدم استقرار! افصل الشاحن فوراً!");
+            alert("📁 تم إرسال ملف 'Secret_Files.zip' إلى جهة مجهولة.");
+            alert("💀 شكراً على البيانات. وداعاً.");
         };
     </script>
 </body>
