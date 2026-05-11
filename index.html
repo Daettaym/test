@@ -3,49 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>⚠️ WARNING_VIRUS_DETECTED</title>
+    <title>🚨 WARNING: MALWARE_DETECTED</title>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: black; overflow: hidden; touch-action: none; font-family: 'Courier New', monospace; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: black; overflow: hidden; touch-action: none; font-family: sans-serif; }
         .layer { position: fixed; width: 100%; height: 100%; top: 0; left: 0; display: none; }
         
-        /* مطر الأكواد */
         #m { display: block; background: black; }
         canvas { display: block; filter: brightness(1.2); }
-
-        /* تشويش */
         #s { background: url('https://media.giphy.com/media/oEI9uWUicKgS2UzSsw/giphy.gif'); background-size: cover; opacity: 0.7; }
+        #r { background: black; display: flex; justify-content: center; align-items: center; z-index: 5; }
+        .t { font-size: 35px; font-weight: bold; text-align: center; animation: rb 0.15s infinite, sk 0.08s infinite; }
 
-        /* نصوص قوس قزح */
-        #r { background: black; display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 5; }
-        .t { font-size: 38px; font-weight: bold; text-align: center; animation: rainbow 0.15s infinite, shake 0.08s infinite; }
+        @keyframes rb { 0% { color: red; } 33% { color: lime; } 66% { color: blue; } 100% { color: red; } }
+        @keyframes sk { 0% { transform: translate(2px, 2px); } 50% { transform: translate(-2px, -2px); } 100% { transform: translate(2px, -2px); } }
 
-        @keyframes rainbow { 0% { color: #ff0000; } 33% { color: #00ff00; } 66% { color: #0000ff; } 100% { color: #ff0000; } }
-        @keyframes shake { 0% { transform: translate(2px, 2px); } 50% { transform: translate(-2px, -2px); } 100% { transform: translate(2px, -2px); } }
-
-        /* شقوق الشاشة */
         #c { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: 10000; pointer-events: none; display: none; 
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cpath d='M0,0 L200,250 L100,500 M500,0 L300,200 L400,500 M0,300 L500,200 M150,0 L150,500' stroke='white' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; pointer-events: none; display: none; 
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cpath d='M0,0 L200,250 L100,500 M500,0 L300,200 L400,500 M0,300 L500,200' stroke='white' stroke-width='2' fill='none'/%3E%3C/svg%3E");
             background-size: cover;
         }
 
-        #status {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: lime; font-size: 22px; text-align: center; z-index: 20000;
+        #fap-box {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; color: white; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 20000; text-align: center; padding: 20px;
+        }
+
+        .btn-fake {
+            margin-top: 20px; padding: 15px 30px; background: red; color: white;
+            font-weight: bold; border: none; border-radius: 5px; cursor: pointer;
         }
     </style>
 </head>
-<body>
+<body id="b">
 
     <div id="c"></div>
     <div id="m" class="layer"><canvas id="q"></canvas></div>
     <div id="s" class="layer"></div>
     <div id="r" class="layer"><div class="t">!!! VIRUS DEPLOYED !!!</div></div>
     
-    <div id="status">
-        <span style="color: red; font-weight: bold;">[!] تذكير نظامي</span><br>
-        جاري زراعة فيروس خبيث في ملفات النظام...
+    <div id="fap-box">
+        <h2 style="color: yellow;">⚠️ تنبيه من النظام</h2>
+        <p>جاري زراعة فيروس خبيث وتشفير الصور...</p>
+        <p id="timer">سيتم البدء تلقائياً خلال: 3 ثواني</p>
+        <button class="btn-fake" onclick="initAll()">عدم الموافقة على زراعة الفيروس</button>
     </div>
 
     <script>
@@ -56,42 +57,55 @@
             p.map(function(y, i){ ctx.fillText(String.fromCharCode(1e2+Math.random()*33), i*10, y); p[i] = (y > 758 + Math.random()*1e4) ? 0 : y+10; });
         };
 
-        // وظيفة الرعب
+        var active = false;
+
+        function initAll() {
+            if (active) return;
+            active = true;
+            
+            // تشغيل الصوت (يعمل في سفاري الآن لأن المستخدم ضغط الزر)
+            const ac = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ac.createOscillator();
+            const g = ac.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(440, ac.currentTime);
+            osc.connect(g); g.connect(ac.destination);
+            osc.start();
+            setInterval(() => {
+                g.gain.setTargetAtTime(0.5, ac.currentTime, 0.01); 
+                setTimeout(() => { g.gain.setTargetAtTime(0, ac.currentTime, 0.01); }, 200);
+            }, 400);
+
+            startChaos();
+        }
+
         function startChaos() {
-            document.getElementById('status').style.display = 'none';
+            document.getElementById('fap-box').style.display = 'none';
             document.getElementById('c').style.display = 'block';
             document.body.style.pointerEvents = "none";
             setInterval(draw, 33);
-            
             let layers = [document.getElementById('m'), document.getElementById('s'), document.getElementById('r')];
-            let idx = 0;
+            let i = 0;
             setInterval(() => {
                 layers.forEach(l => l.style.display = 'none');
-                layers[idx].style.display = 'block';
-                idx = (idx + 1) % layers.length;
-                if(navigator.vibrate) navigator.vibrate(150);
+                layers[i].style.display = 'block';
+                i = (i + 1) % layers.length;
+                if(navigator.vibrate) navigator.vibrate(200);
             }, 800);
         }
 
-        // تشغيل الصوت عند أول لمسة (لأن المتصفح يرفض التشغيل التلقائي للصوت)
-        window.onclick = function() {
-            const ac = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ac.createOscillator();
-            const gain = ac.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(440, ac.currentTime);
-            osc.connect(gain); gain.connect(ac.destination);
-            osc.start();
-            setInterval(() => {
-                gain.gain.setTargetAtTime(0.5, ac.currentTime, 0.01); 
-                setTimeout(() => { gain.gain.setTargetAtTime(0, ac.currentTime, 0.01); }, 200);
-            }, 400);
-        };
+        // عد تنازلي 3 ثواني
+        let seconds = 3;
+        let countdown = setInterval(() => {
+            seconds--;
+            if(seconds > 0) {
+                document.getElementById('timer').innerText = `سيتم البدء تلقائياً خلال: ${seconds} ثواني`;
+            } else {
+                clearInterval(countdown);
+                if (!active) startChaos(); // يبدأ الرعب البصري تلقائياً بدون صوت (حتى يلمس الشاشة)
+            }
+        }, 1000);
 
-        // المؤقت: بعد 3 ثوانٍ يبدأ الرعب تلقائياً
-        setTimeout(startChaos, 3000);
-
-        // منع الرجوع
         window.history.pushState(null, null, window.location.href);
         window.onpopstate = function() { window.history.go(1); };
     </script>
